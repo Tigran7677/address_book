@@ -30,6 +30,46 @@ const int CAPACITY = 100;
 int user_count = 5;
 
 
+void delete_user(book (&array)[CAPACITY]) {
+    cout << "record number to delete: ";
+    int num;
+    cin >> num;
+    
+    for (int i = num - 1; i < user_count - 1; ++i) {
+        array[i] = array[i + 1];
+    }
+    user_count--;
+}
+
+void add_user(book (&array)[CAPACITY]) {
+    cout << "write Name: " << endl;
+    cin >> array[user_count].name;
+    cout << "write Last_name: " << endl;
+    cin >> array[user_count].lastname;
+    cout << "write phone_number: " << endl;
+    cin >> array[user_count].number;
+    
+    user_count++;
+}
+
+void user_search(book (&array)[CAPACITY], string input) {
+    cout << "write name  ";
+    cin >> input;
+    
+    for (int i = 0; i < user_count; ++i) {
+        if (starts_with(array[i].name, input) || starts_with(array[i].lastname, input)) {
+            print_user(array[i], i+1);
+        }
+    }
+}
+
+void all_user (book (&array) [CAPACITY]) {
+    for (int i = 0; i < user_count; ++i) {
+        print_user(array[i], i+1);
+    }
+}
+
+
 
 int main(int argc, const char * argv[]) {
     
@@ -48,48 +88,18 @@ int main(int argc, const char * argv[]) {
         if (input == "exit") {
             break;
         } else if (input == "all") {
-            for (int i = 0; i < user_count; ++i) {
-                print_user(array[i], i+1);
-            }
+            all_user(array);
         } else if (input == "search") {
-            cout << "write name  ";
-            cin >> input;
-            
-            for (int i = 0; i < user_count; ++i) {
-                if (starts_with(array[i].name, input) || starts_with(array[i].lastname, input)) {
-                    print_user(array[i], i+1);
-                }
-            }
+            user_search(array, input);
         } else if (input == "add") {
-            cout << "write Name: " << endl;
-            cin >> array[user_count].name;
-            cout << "write Last_name: " << endl;
-            cin >> array[user_count].lastname;
-            cout << "write phone_number: " << endl;
-            cin >> array[user_count].number;
-            
-            user_count++;
+            add_user(array);
         } else if (input == "delete") {
-            cout << "record number to delete: ";
-            int num;
-            cin >> num;
-            
-            for (int i = num - 1; i < user_count - 1; ++i) {
-                array[i] = array[i + 1];
-            }
-            user_count--;
+            delete_user(array);
         }
-        
-        
-        
         else {
             cout << "Wrong command. Try again." << endl;
         }
-        
     }  while (true);
-    
-    
-    
     
     return 0;
 }
