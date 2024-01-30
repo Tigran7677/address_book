@@ -21,6 +21,15 @@ bool starts_with(const string str, const string prefix) {
     return str.find(prefix) == 0;
 }
 
+
+
+
+void print_user(book user) {
+    cout << user.name << " " << user.lastname << " " << user.number << endl;
+}
+
+
+
 int main(int argc, const char * argv[]) {
     
     book array[5];
@@ -39,7 +48,7 @@ int main(int argc, const char * argv[]) {
             break;
         } else if (input == "all") {
             for (int i = 0; i < 5; ++i) {
-                cout << array[i].name << " " << array[i].lastname << " " << array[i].number << endl;
+                print_user(array[i]);
             }
         } else if (input == "search") {
             cout << "write name  ";
@@ -47,7 +56,7 @@ int main(int argc, const char * argv[]) {
             
             for (int i = 0; i < 5; ++i) {
                 if (starts_with(array[i].name, input) || starts_with(array[i].lastname, input)) {
-                    cout << array[i].name << " " << array[i].lastname << " " << array[i].number << endl;
+                    print_user(array[i]);
                 }
             }
         } else {
