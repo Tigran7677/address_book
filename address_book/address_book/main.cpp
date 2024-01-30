@@ -21,18 +21,19 @@ bool starts_with(const string str, const string prefix) {
     return str.find(prefix) == 0;
 }
 
-
-
-
-void print_user(book user) {
-    cout << user.name << " " << user.lastname << " " << user.number << endl;
+void print_user(book user, int index) {
+    cout << index << " " << user.name << " " << user.lastname << " " << user.number << endl;
 }
+
+
+const int CAPACITY = 100;
+int user_count = 5;
 
 
 
 int main(int argc, const char * argv[]) {
     
-    book array[5];
+    book array[CAPACITY];
     array[0] = {"Valod", "Valodyan", "+374 - 94 - 94 - 94 - 94" };
     array[1] = {"Karen", "Karenyan", "+374 - 77 - 77 - 77 - 77" };
     array[2] = {"Vardan", "Vardanyan", "+374 - 98 - 15 - 14 - 14" };
@@ -42,28 +43,53 @@ int main(int argc, const char * argv[]) {
     string input;
 
     do {
-        cout << "Type command [all, exit, search]: ";
+        cout << "Type command [all, exit, search, add, delete]: ";
         cin >> input;
         if (input == "exit") {
             break;
         } else if (input == "all") {
-            for (int i = 0; i < 5; ++i) {
-                print_user(array[i]);
+            for (int i = 0; i < user_count; ++i) {
+                print_user(array[i], i+1);
             }
         } else if (input == "search") {
             cout << "write name  ";
             cin >> input;
             
-            for (int i = 0; i < 5; ++i) {
+            for (int i = 0; i < user_count; ++i) {
                 if (starts_with(array[i].name, input) || starts_with(array[i].lastname, input)) {
-                    print_user(array[i]);
+                    print_user(array[i], i+1);
                 }
             }
-        } else {
+        } else if (input == "add") {
+            cout << "write Name: " << endl;
+            cin >> array[user_count].name;
+            cout << "write Last_name: " << endl;
+            cin >> array[user_count].lastname;
+            cout << "write phone_number: " << endl;
+            cin >> array[user_count].number;
+            
+            user_count++;
+        } else if (input == "delete") {
+            cout << "record number to delete: ";
+            int num;
+            cin >> num;
+            
+            for (int i = num - 1; i < user_count - 1; ++i) {
+                array[i] = array[i + 1];
+            }
+            user_count--;
+        }
+        
+        
+        
+        else {
             cout << "Wrong command. Try again." << endl;
         }
         
     }  while (true);
+    
+    
+    
     
     return 0;
 }
