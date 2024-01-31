@@ -69,6 +69,18 @@ void all_user (book (&array) [CAPACITY]) {
     }
 }
 
+void change_user (book (&array) [CAPACITY]) {
+    cout << "write number who change: ";
+    int index;
+    cin >> index;
+    
+    cout << "write new name: ";
+    cin >> array[index].name;
+    cout  << "write new last_name: ";
+    cin >> array[index].lastname;
+    cout << "write new phone number: ";
+    cin >> array[index].number;
+}
 
 
 int main(int argc, const char * argv[]) {
@@ -83,7 +95,7 @@ int main(int argc, const char * argv[]) {
     string input;
 
     do {
-        cout << "Type command [all, exit, search, add, delete]: ";
+        cout << "Type command [all, exit, search, add, delete, change]: ";
         cin >> input;
         if (input == "exit") {
             break;
@@ -95,6 +107,8 @@ int main(int argc, const char * argv[]) {
             add_user(array);
         } else if (input == "delete") {
             delete_user(array);
+        } else if (input == "change") {
+            change_user(array);
         }
         else {
             cout << "Wrong command. Try again." << endl;
