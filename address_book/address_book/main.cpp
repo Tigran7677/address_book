@@ -8,8 +8,13 @@
 #include <iostream>
 #include "book.hpp"
 #include <string>
+#include <fstream>
+
 
 using namespace std;
+
+
+
 
 struct book {
     string name;
@@ -27,7 +32,7 @@ void print_user(book user, int index) {
 
 
 const int CAPACITY = 100;
-int user_count = 5;
+int user_count = 0;
 
 
 void delete_user(book (&array)[CAPACITY]) {
@@ -42,12 +47,13 @@ void delete_user(book (&array)[CAPACITY]) {
 }
 
 void add_user(book (&array)[CAPACITY]) {
-    cout << "write Name: " << endl;
-    cin >> array[user_count].name;
-    cout << "write Last_name: " << endl;
-    cin >> array[user_count].lastname;
-    cout << "write phone_number: " << endl;
-    cin >> array[user_count].number;
+    cin.ignore();
+    cout << "write Name: ";
+    getline (cin, array[user_count].name);
+    cout << "write Last_name: ";
+    getline (cin, array[user_count].lastname);
+    cout << "write phone_number: ";
+    getline (cin, array[user_count].number);
     
     user_count++;
 }
@@ -70,34 +76,75 @@ void all_user (book (&array) [CAPACITY]) {
 }
 
 void change_user (book (&array) [CAPACITY]) {
-    cout << "write number who change: ";
-    int index;
-    cin >> index;
+   
+    int index = 0;
     
-    cout << "write new name: ";
-    cin >> array[index].name;
-    cout  << "write new last_name: ";
-    cin >> array[index].lastname;
-    cout << "write new phone number: ";
-    cin >> array[index].number;
+    while (index < 1 || index > user_count) {
+        cout << "write number who change [1-" << user_count << "]: ";
+        cin >> index;
+    }
+    
+    string buff;
+    cin.ignore();
+    cout << "write new name [" << array[index - 1].name << "]: ";
+    getline ( cin, buff);
+    if (buff != "") {
+        array[index - 1].name = buff;
+    }
+    cout  << "write new last_name [" << array[index - 1].lastname << "]: ";
+    getline ( cin, buff);
+    if (! buff.empty()) {
+        array[index - 1].lastname = buff;
+    }
+    cout << "write new phone number [" << array[index - 1].number << "]: ";
+    getline ( cin, buff);
+    if (! buff.empty()) {
+        array[index - 1].number = buff;
+    }
 }
 
 
 int main(int argc, const char * argv[]) {
     
+    string mytext;
+    ifstream Myfile("/Users/macbookair/workspace/address_book/data.txt");
     book array[CAPACITY];
-    array[0] = {"Valod", "Valodyan", "+374 - 94 - 94 - 94 - 94" };
-    array[1] = {"Karen", "Karenyan", "+374 - 77 - 77 - 77 - 77" };
-    array[2] = {"Vardan", "Vardanyan", "+374 - 98 - 15 - 14 - 14" };
-    array[3] = {"Gagik", "Gagikyan", "+374 - 94 - 22 - 14 - 13" };
-    array[4] = {"Ashot", "Ashotyan", "+374 - 99 - 13 - 14 - 22" };
+
+    
+    while (getline (Myfile, mytext)) {
+        int comma_count = 0;
+        for (int i = 0; i < mytext.length(); ++i) {
+            if (mytext[i] == ',') {
+                ++comma_count;
+                continue;
+            }
+            if (comma_count == 0) {
+                array[user_count].name += mytext[i];
+            }
+            if (comma_count == 1) {
+                array[user_count].lastname += mytext[i];
+            }
+            if (comma_count == 2) {
+                array[user_count].number += mytext[i];
+            }
+        }
+        ++user_count;
+    }
+    
+    Myfile.close();
     
     string input;
-
     do {
         cout << "Type command [all, exit, search, add, delete, change]: ";
         cin >> input;
         if (input == "exit") {
+            
+            ofstream MyDatafile("/Users/macbookair/workspace/address_book/data.txt");
+            
+            for (int i = 0; i < user_count; ++i) {
+                MyDatafile << array[i].name << ',' << array[i].lastname << ',' << array[i].number << endl;
+            }
+            MyDatafile.close();
             break;
         } else if (input == "all") {
             all_user(array);
@@ -114,6 +161,11 @@ int main(int argc, const char * argv[]) {
             cout << "Wrong command. Try again." << endl;
         }
     }  while (true);
+    
+    
+    
+    
+    
     
     return 0;
 }
